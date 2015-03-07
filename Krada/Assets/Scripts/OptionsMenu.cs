@@ -17,7 +17,7 @@ public class OptionsMenu : MonoBehaviour {
 
     void Awake()
     {
-        if (true)
+        if (!PlayerPrefs.HasKey("Set"))
         {
             QualityLevel = QualitySettings.GetQualityLevel();
             audio = AudioListener.volume;
