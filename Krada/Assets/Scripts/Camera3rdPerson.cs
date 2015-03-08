@@ -20,6 +20,12 @@ public class Camera3rdPerson : MonoBehaviour {
 		    Mathf.LerpAngle (transform.rotation.eulerAngles.y, Target.rotation.eulerAngles.y, 0.8f), 
 		    transform.rotation.eulerAngles.z
 		);
-		transform.position = Vector3.Lerp (transform.position, Target.position+Target.rotation*PositionDelta, 0.2f);
+		transform.position = Vector3.Lerp (transform.position, Target.position+Target.rotation*PositionDelta, 0.3f);
+		RaycastHit hit;
+		var direction = transform.position - Target.position;
+		direction.Normalize ();
+		Physics.Raycast (Target.position + direction * 0.2f, direction, out hit, PositionDelta.magnitude);
+		if (hit.collider)
+			this.transform.position = hit.point - direction * 0.1f;
 	}
 }
