@@ -8,8 +8,8 @@ public class RobberMovement : MonoBehaviour {
 	public float SeeDistance;
 
 	private GameObject Target;
-	private Vector3 Direction;
-	private Vector3 TargetDirection;
+	private Vector3 SpeedVector;
+	private Vector3 TargetSpeedVector;
 	private bool ActivelyFollow;
 
 	private float changeDirectionTimer;
@@ -17,15 +17,20 @@ public class RobberMovement : MonoBehaviour {
 	private Vector3 inTargetDirection{
 		get {
 			if(Target != null)
-				return Target.transform.position - this.transform.position;
+				return (Target.transform.position - this.transform.position).normalized;
 			else
 				return Vector3.zero;
+		}
+	}
+	private Vector3 rayOrigin {
+		get {
+			return this.transform.position + Vector3.up * .5f;
 		}
 	}
 
 	// Use this for initialization
 	void Start () {
-		Direction = Vector3.zero;
+		SpeedVector = Vector3.zero;
 		changeDirectionTimer = 0;
 	}
 	
@@ -33,12 +38,15 @@ public class RobberMovement : MonoBehaviour {
 	void Update () {
 		changeDirectionTimer -= Time.deltaTime;
 		if(Target != null && ActivelyFollow){
-			TargetDirection = inTargetDirection;
+			TargetSpeedVector = inTargetDirection * Speed * 2;
 		} else if (changeDirectionTimer <= 0) {
-			changeDirectionTimer = Random.Range (0.5f, 3);
-			TargetDirection = Random.onUnitSphere + Direction.normalized;
+			changeDirectionTimer = Random.Range (0.6f, 2);
+			TargetSpeedVector = Random.onUnitSphere * Speed + SpeedVector;
 		}
 
+		CheckCollision (transform.forward);
+		CheckCollision (transform.right);
+		CheckCollision (-transform.right);
 		FindTargetAndFollow ();
 
 		Move ();
@@ -46,24 +54,36 @@ public class RobberMovement : MonoBehaviour {
 
 	void FindTargetAndFollow (){
 		Target = GameObject.FindGameObjectWithTag ("Player");
-		Ray ray = new Ray(this.transform.position, inTargetDirection);
-		Debug.DrawRay (ray.origin, ray.direction, Color.white, SeeDistance, true);
+		Ray ray = new Ray(transform.position, inTargetDirection);
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit, SeeDistance);
 		if (hit.collider != null)
-		if (hit.collider.tag == "Player" && Vector3.Dot (ray.direction, Direction.normalized) > 0.2) {
+		if (hit.collider.tag == "Player" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
 			ActivelyFollow = true;
-		} else if (hit.collider.tag == "Wall" && Vector3.Distance (hit.point, ray.origin) < 1) {
-			ActivelyFollow = false;
-			TargetDirection = Quaternion.Euler (0, 90, 0) * hit.normal;
 		} else {
 			ActivelyFollow = false;
 		}
 	}
 
+	void CheckCollision (Vector3 direction){
+		Ray ray = new Ray (rayOrigin, direction);
+		RaycastHit hit;
+		Physics.Raycast (ray, out hit, 1);
+		if (hit.collider != null)
+		if (hit.collider.tag == "Wall" || hit.collider.tag == "Robber") {
+			Debug.DrawLine (hit.point, ray.origin, Color.red);
+			TargetSpeedVector += hit.normal * 0.01f;
+		}
+	}
+
 	void Move (){
-		Direction = Vector3.RotateTowards (Direction, TargetDirection, 0.02f, 10000f);
-		Direction.y = 0;
-		Controller.SimpleMove (Direction.normalized * Speed * (ActivelyFollow ? 2 : 1));
+		var maxspeed = Speed * (ActivelyFollow ? 2 : 1);
+		TargetSpeedVector = TargetSpeedVector.normalized * Mathf.Lerp (TargetSpeedVector.magnitude, maxspeed, 0.1f);
+		TargetSpeedVector = Vector3.ClampMagnitude (TargetSpeedVector, maxspeed);
+		SpeedVector = Vector3.RotateTowards (SpeedVector, TargetSpeedVector, 0.05f, 0.1f);
+		SpeedVector.y = 0;
+		if (Vector3.Dot (SpeedVector, TargetSpeedVector) > 0)
+			Controller.SimpleMove (SpeedVector);
+		this.transform.forward = SpeedVector.normalized;
 	}
 }
