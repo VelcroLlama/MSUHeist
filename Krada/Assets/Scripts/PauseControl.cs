@@ -7,7 +7,7 @@ public class PauseControl : MonoBehaviour {
 
     void Awake()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false; 
     }
 
@@ -18,7 +18,7 @@ public class PauseControl : MonoBehaviour {
             {
                 pause.SetBool("Open", false);
                 Time.timeScale = 1;
-                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.Confined;
                 Cursor.visible = false; 
 
 
