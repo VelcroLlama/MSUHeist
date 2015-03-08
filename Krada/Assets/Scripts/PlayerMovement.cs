@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		this.transform.Rotate (0, Input.GetAxis ("Mouse X") * Sensitivity, 0, Space.Self);
+		this.transform.Rotate (0, Input.GetAxis ("Mouse X") * Time.deltaTime * Sensitivity, 0, Space.Self);
 		var speed = Vector3.zero;
 		var maxspeed = (Input.GetAxis ("Fire3") > 0 ? SprintCoef : 1) * Speed;
 		speed += Vector3.forward * Input.GetAxis ("Vertical") * maxspeed;
