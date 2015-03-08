@@ -51,16 +51,19 @@ public class RobberMovement : MonoBehaviour {
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit, SeeDistance);
 		if (hit.collider != null)
-		if (hit.collider.tag == "Player") {
+		if (hit.collider.tag == "Player" && Vector3.Dot (ray.direction, Direction.normalized) > 0.2) {
 			ActivelyFollow = true;
+		} else if (hit.collider.tag == "Wall" && Vector3.Distance (hit.point, ray.origin) < 1) {
+			ActivelyFollow = false;
+			TargetDirection = Quaternion.Euler (0, 90, 0) * hit.normal;
 		} else {
 			ActivelyFollow = false;
 		}
 	}
 
 	void Move (){
-		Direction = Vector3.Lerp (Direction, TargetDirection, 0.01f);
+		Direction = Vector3.RotateTowards (Direction, TargetDirection, 0.02f, 10000f);
 		Direction.y = 0;
-		Controller.SimpleMove(Direction.normalized * Speed);
+		Controller.SimpleMove (Direction.normalized * Speed * (ActivelyFollow ? 2 : 1));
 	}
 }
