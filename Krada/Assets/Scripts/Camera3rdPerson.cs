@@ -5,6 +5,7 @@ public class Camera3rdPerson : MonoBehaviour {
 
 	private Vector3 PositionDelta;
 	private Transform Target;
+	private float VerticalRotation;
 
 	// Use this for initialization
 	void Start () {
@@ -16,7 +17,7 @@ public class Camera3rdPerson : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		transform.rotation = Quaternion.Euler (
-			transform.rotation.eulerAngles.x, 
+			VerticalRotation, 
 		    Mathf.LerpAngle (transform.rotation.eulerAngles.y, Target.rotation.eulerAngles.y, 0.8f), 
 		    transform.rotation.eulerAngles.z
 		);
@@ -27,5 +28,8 @@ public class Camera3rdPerson : MonoBehaviour {
 		Physics.Raycast (Target.position + direction * 0.2f, direction, out hit, PositionDelta.magnitude);
 		if (hit.collider)
 			this.transform.position = hit.point - direction * 0.1f;
+
+		VerticalRotation -= Input.GetAxis ("Mouse Y");
+		VerticalRotation = Mathf.Clamp (VerticalRotation, -20, 20);
 	}
 }

@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	public float Sensitivity;
 	public float Speed;
-
+	public float SprintCoef;
 
 	// Use this for initialization
 	void Start () {
@@ -18,9 +18,10 @@ public class PlayerMovement : MonoBehaviour {
 	void Update () {
 		this.transform.Rotate (0, Input.GetAxis ("Mouse X") * Sensitivity, 0, Space.Self);
 		var speed = Vector3.zero;
-		speed += Vector3.forward * Input.GetAxis ("Vertical") * Speed;
-		speed += Vector3.right * Input.GetAxis ("Horizontal") * Speed;
-		speed = Vector3.ClampMagnitude (speed, Speed);
+		var maxspeed = (Input.GetAxis ("Fire3") > 0 ? SprintCoef : 1) * Speed;
+		speed += Vector3.forward * Input.GetAxis ("Vertical") * maxspeed;
+		speed += Vector3.right * Input.GetAxis ("Horizontal") * maxspeed;
+		speed = Vector3.ClampMagnitude (speed, maxspeed);
 		controller.SimpleMove (this.transform.rotation * speed);
 	}
 }
