@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Camera3rdPerson : MonoBehaviour {
 
+	public float VerticalSensitivity;
+
 	private Vector3 PositionDelta;
 	private Transform Target;
 	private float VerticalRotation;
@@ -29,7 +31,7 @@ public class Camera3rdPerson : MonoBehaviour {
 		if (hit.collider)
 			this.transform.position = hit.point - direction * 0.1f;
 
-		VerticalRotation -= Input.GetAxis ("Mouse Y");
+		VerticalRotation -= Input.GetAxis ("Mouse Y") * Time.deltaTime * VerticalSensitivity;
 		VerticalRotation = Mathf.Clamp (VerticalRotation, -20, 20);
 	}
 }
