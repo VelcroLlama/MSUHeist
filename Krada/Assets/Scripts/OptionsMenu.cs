@@ -35,42 +35,34 @@ public class OptionsMenu : MonoBehaviour {
             PlayerPrefs.SetInt("Fullscreen", fullscreen);
             PlayerPrefs.SetFloat("Audio", audio);
             PlayerPrefs.SetInt("Set", 1);
-            PlayerPrefs.SetInt("Height", height);
-            PlayerPrefs.SetInt("Width", width);
             PlayerPrefs.Save();
-            Text.text = height + " x " + width;            
+            Text.text = height + " x " + width;
+            Debug.Log(height);
+            Debug.Log(width);
         }
         else
         {
             QualityLevel = PlayerPrefs.GetInt("QualityLevel");
             fullscreen = PlayerPrefs.GetInt("Fullscreen");
             audio = PlayerPrefs.GetFloat("Audio");
-            height=PlayerPrefs.GetInt("Height");
-            width=PlayerPrefs.GetInt("Width");
             QualitySettings.SetQualityLevel(QualityLevel);
             if (fullscreen == 1)
                 Screen.fullScreen = true;
             else
                 Screen.fullScreen = false;
             AudioListener.volume=audio;
-            Screen.SetResolution(height, width,Screen.fullScreen);
 
 
         }
+        width = Screen.height;
+        height = Screen.width;
+        Text.text = height + " x " + width;
     }
 
     public void Open()
     {
         quality.value = QualityLevel;
         volume.value = audio;
-        if (fullscreen==1)
-        {
-            fullScreen.isOn = true;
-        }
-        else
-        {
-            fullScreen.isOn = false;
-        }
 
     }
 

@@ -42,4 +42,9 @@ public class MenuAdmin : MonoBehaviour
             levels.SetBool("closed", false);
         }
     }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }
