@@ -7,25 +7,25 @@ public class ArrowControl : MonoBehaviour
     public Transform Goal;
     public Transform Camera;
 
-    private Vector3 GoalPosition;
-    private Vector3 CameraPosition;
-    private Vector3 targetDir;
-    private Vector3 Forward;
+    private Vector2 targetDir {
+		get {
+			var goalpos = Goal.position - Camera.position;
+			return new Vector2(goalpos.x, goalpos.z).normalized;
+		}
+	}
+	private Vector2 Forward2D{
+		get {
+			return new Vector2(Camera.forward.x, Camera.forward.z);
+		}
+	}
     private float Angle;
 
 
 
     void Update()
     {
-
-        GoalPosition = new Vector3(Goal.position.x, 0, Goal.position.z);
-        CameraPosition = new Vector3(Camera.position.x, 0, Camera.position.z);
-        targetDir = GoalPosition - CameraPosition;
-        Forward = Camera.transform.forward;
-        Angle = Vector3.Angle(targetDir, Forward);
-        if(true)
+		Angle = (Mathf.Atan2 (targetDir.y, targetDir.x) - Mathf.Atan2 (Forward2D.y, Forward2D.x)) * Mathf.Rad2Deg;
         transform.localRotation = Quaternion.Euler(0, 0, Angle);
-     
     }
 
 
