@@ -45,9 +45,13 @@ public class RobberMovement : MonoBehaviour {
 			TargetSpeedVector = Random.onUnitSphere * Speed + SpeedVector;
 		}
 
-		CheckCollision (transform.forward, 0.1f);
-		CheckCollision (transform.right, 0.02f);
-		CheckCollision (-transform.right, -0.02f);
+		if (CheckCollision (transform.right, 0.02f))
+			CheckCollision (transform.forward, 0.08f);
+		if (CheckCollision (-transform.right, -0.02f))
+			CheckCollision (transform.forward, -0.08f);
+		else
+			CheckCollision (transform.forward, 0.08f);
+
 		FindTargetAndFollow ();
 
 		Move ();
@@ -66,16 +70,18 @@ public class RobberMovement : MonoBehaviour {
 		}
 	}
 
-	void CheckCollision (Vector3 direction, float coef){
+	bool CheckCollision (Vector3 direction, float coef){
 		Ray ray = new Ray (rayOrigin, direction);
 		RaycastHit hit;
-		Physics.Raycast (ray, out hit, 1);
+		Physics.Raycast (ray, out hit, 0.8f);
 		if (hit.collider != null)
 		if (hit.collider.tag == "Wall" || hit.collider.tag == "Robber") {
 			Debug.DrawLine (hit.point, ray.origin, Color.red);
 			var normal = Quaternion.AngleAxis(90, Vector3.up) * hit.normal;
 			TargetSpeedVector += coef * Mathf.Clamp(1-hit.distance, 0, 1) * normal;
+			return true;
 		}
+		return false;
 	}
 
 	void Move (){
