@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour {
 	void Update () {
 		if (CanJump && Input.GetAxis ("Jump") > 0) {
 			CanJump = false;
-			DownSpeed = Vector3.up;
+			DownSpeed = Vector3.up * 1.2f;
 		}
 		this.transform.Rotate (0, Input.GetAxis ("Mouse X") * Time.deltaTime * Sensitivity, 0, Space.Self);
 		var speed = Vector3.zero;
