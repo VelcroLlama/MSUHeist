@@ -5,14 +5,20 @@ public class PauseControl : MonoBehaviour {
 
     public Animator pause;
     public Animator start;
+    private bool started=false;
 
     void Awake()
     {
         Time.timeScale = 0;
+        started = false;
     }
 
     void Update () {
-        if (Input.GetKeyDown(KeyCode.Escape))
+
+        
+        
+        
+        if (Input.GetKeyDown(KeyCode.Escape)&& started)
         {
             if (pause.GetBool("Open"))
             {
@@ -32,6 +38,15 @@ public class PauseControl : MonoBehaviour {
 
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && !started)
+        {
+            start.SetBool("OK", true);
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
+            Time.timeScale = 1;
+            started = true;
+        }
         
     
     }
@@ -47,6 +62,7 @@ public class PauseControl : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = false;
         Time.timeScale = 1;
+        started = true;
     }
 
 }
