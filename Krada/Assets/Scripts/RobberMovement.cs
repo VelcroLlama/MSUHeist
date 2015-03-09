@@ -5,6 +5,7 @@ public class RobberMovement : MonoBehaviour {
 
 	public CharacterController Controller;
 	public float Speed;
+	public float SprintCoef;
 	public float SeeDistance;
 
 	private GameObject Target;
@@ -38,15 +39,15 @@ public class RobberMovement : MonoBehaviour {
 	void Update () {
 		changeDirectionTimer -= Time.deltaTime;
 		if(Target != null && ActivelyFollow){
-			TargetSpeedVector = inTargetDirection * Speed * 2;
+			TargetSpeedVector = inTargetDirection * Speed * SprintCoef;
 		} else if (changeDirectionTimer <= 0) {
 			changeDirectionTimer = Random.Range (0.6f, 2);
 			TargetSpeedVector = Random.onUnitSphere * Speed + SpeedVector;
 		}
 
-		CheckCollision (transform.forward);
-		CheckCollision (transform.right);
-		CheckCollision (-transform.right);
+		CheckCollision (transform.forward, 0.1f);
+		CheckCollision (transform.right, 0.02f);
+		CheckCollision (-transform.right, -0.02f);
 		FindTargetAndFollow ();
 
 		Move ();
@@ -65,14 +66,15 @@ public class RobberMovement : MonoBehaviour {
 		}
 	}
 
-	void CheckCollision (Vector3 direction){
+	void CheckCollision (Vector3 direction, float coef){
 		Ray ray = new Ray (rayOrigin, direction);
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit, 1);
 		if (hit.collider != null)
 		if (hit.collider.tag == "Wall" || hit.collider.tag == "Robber") {
 			Debug.DrawLine (hit.point, ray.origin, Color.red);
-			TargetSpeedVector += hit.normal * 0.01f;
+			var normal = Quaternion.AngleAxis(90, Vector3.up) * hit.normal;
+			TargetSpeedVector += coef * Mathf.Clamp(1-hit.distance, 0, 1) * normal;
 		}
 	}
 
