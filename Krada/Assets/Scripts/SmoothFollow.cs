@@ -20,7 +20,8 @@ public class SmoothFollow : MonoBehaviour {
 	
 	// Update is called once per frame
 	void LateUpdate () {
-		
+		if (Target == null)
+			return;
 		float rotationAngle = Target.eulerAngles.y;
 		// Damp the rotation around the y-axis
 		var currentRotation = Quaternion.Euler(0, rotationAngle, 0);

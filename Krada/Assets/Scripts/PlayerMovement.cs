@@ -40,4 +40,8 @@ public class PlayerMovement : MonoBehaviour {
 			CanJump = true;
 		}
 	}
+
+	void Activate(){
+		this.enabled = true;
+	}
 }
