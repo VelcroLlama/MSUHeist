@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour {
 		}
 	}
 
-	void Activate(){
+	public void Activate(){
 		this.enabled = true;
 	}
 }

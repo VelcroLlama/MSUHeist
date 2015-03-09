@@ -47,7 +47,7 @@ public class RobberMovement : MonoBehaviour {
 
 		if (CheckCollision (transform.right, 0.02f))
 			CheckCollision (transform.forward, 0.08f);
-		if (CheckCollision (-transform.right, -0.02f))
+		else if (CheckCollision (-transform.right, -0.02f))
 			CheckCollision (transform.forward, -0.08f);
 		else
 			CheckCollision (transform.forward, 0.08f);
