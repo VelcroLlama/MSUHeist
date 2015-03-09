@@ -4,11 +4,11 @@ using System.Collections;
 public class PauseControl : MonoBehaviour {
 
     public Animator pause;
+    public Animator start;
 
     void Awake()
     {
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false; 
+        Time.timeScale = 0;
     }
 
     void Update () {
@@ -40,4 +40,13 @@ public class PauseControl : MonoBehaviour {
     {
         Application.Quit();
     }
+
+    public void StartPanelClose()
+    {
+        start.SetBool("OK", true);
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
+        Time.timeScale = 1;
+    }
+
 }
