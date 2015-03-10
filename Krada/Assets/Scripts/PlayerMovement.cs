@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour {
 	public float SprintCoef;
 
 	private Vector3 DownSpeed;
-	private bool CanJump;
 
 	// Use this for initialization
 	void Start () {
@@ -19,8 +18,7 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (CanJump && Input.GetAxis ("Jump") > 0) {
-			CanJump = false;
+		if (controller.isGrounded && Input.GetAxis ("Jump") > 0) {
 			DownSpeed = Vector3.up * 1.2f;
 		}
 		this.transform.Rotate (0, Input.GetAxis ("Mouse X") * Time.deltaTime * Sensitivity, 0, Space.Self);
@@ -32,13 +30,6 @@ public class PlayerMovement : MonoBehaviour {
 		DownSpeed += Physics.gravity * Time.deltaTime;
 		speed += DownSpeed;
 		controller.Move (this.transform.rotation * speed * Time.deltaTime);
-	}
-
-	void OnControllerColliderHit(ControllerColliderHit hit) {
-		if (hit.collider.name == "Floor") {
-			DownSpeed = Vector3.zero;
-			CanJump = true;
-		}
 	}
 
 	public void Activate(){

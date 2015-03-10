@@ -4,36 +4,38 @@ using System.Collections;
 public class VaultAnimatorAndTrigger : MonoBehaviour {
 
     public Animator vault;
-    public Animator screen;
-    public bool entered = false;
+    private Animator screen;
     private bool count = false;
     private float lastTime=0;
     private float timePassed=0;
-    private GameObject enteringObject; //ovo tu popuni sa onim objektom koji triggera stvar
     private bool CanClose=false;
 
 
 	void Start () {
-	    
+		screen = GameObject.FindGameObjectWithTag ("BlackScreen").GetComponent<Animator>();
 	}
-	
+
+	void OnTriggerEnter(Collider other){
+		Debug.Log ("Trigger entered!");
+		if (other.tag == "Player") {
+			vault.SetBool("Entered", true);
+			Destroy(other.gameObject, 0.4f);
+			count = true;
+			lastTime = Time.timeSinceLevelLoad;
+			CanClose=true;
+			if (screen != null){
+				Time.timeScale = 0;
+				screen.SetBool("Open", true);
+			}
+		}
+	}
+
 	// Update is called once per frame
 	void Update () {
-        if (entered)
-        {
-            vault.SetBool("Entered", true);
-            Destroy(enteringObject, 0.4f);
-            screen.SetBool("Open", true);
-            count = true;
-            lastTime = Time.timeSinceLevelLoad;
-            entered = false;
-            Time.timeScale = 0;
-            CanClose=true;
-
-        }
         if (CanClose)
-        {
-            screen.SetBool("Open", false);
+		{
+			if (screen != null)
+				screen.SetBool("Open", false);
             CanClose = false;
         }
 
@@ -51,5 +53,4 @@ public class VaultAnimatorAndTrigger : MonoBehaviour {
         }
 
 	}
-
 }

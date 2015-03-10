@@ -7,6 +7,8 @@ public class RobberMovement : MonoBehaviour {
 	public float Speed;
 	public float SprintCoef;
 	public float SeeDistance;
+	public float GrabDistance;
+	public float GrabDuration;
     public Animator robberAnim;
 
 	private GameObject Target;
@@ -67,6 +69,9 @@ public class RobberMovement : MonoBehaviour {
 		Physics.Raycast (ray, out hit, SeeDistance);
 		if (hit.collider != null)
 		if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
+			if(hit.distance < GrabDistance){
+				GrabPlayer(hit.collider.gameObject);
+			}
 			ActivelyFollow = true;
             robberAnim.SetBool("Running", true);
 		} else {
@@ -98,5 +103,13 @@ public class RobberMovement : MonoBehaviour {
 		if (Vector3.Dot (SpeedVector, TargetSpeedVector) > 0)
 			Controller.SimpleMove (SpeedVector);
 		this.transform.forward = SpeedVector.normalized;
+	}
+
+	void GrabPlayer(GameObject player){
+		var movement = player.GetComponent<PlayerMovement> ();
+		if (movement != null) {
+			movement.enabled = false;
+			Destroy(player, GrabDuration);
+		}
 	}
 }
