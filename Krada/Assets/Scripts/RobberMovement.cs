@@ -58,12 +58,12 @@ public class RobberMovement : MonoBehaviour {
 	}
 
 	void FindTargetAndFollow (){
-		Target = GameObject.FindGameObjectWithTag ("Player");
+		Target = GameObject.FindGameObjectWithTag ("PlayerBody");
 		Ray ray = new Ray(transform.position, inTargetDirection);
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit, SeeDistance);
 		if (hit.collider != null)
-		if (hit.collider.tag == "Player" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
+		if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
 			ActivelyFollow = true;
 		} else {
 			ActivelyFollow = false;
