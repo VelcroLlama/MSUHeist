@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: fbd1f0d4e018f5242badcbd6249e573d
-timeCreated: 1426019571
+guid: 84fc3218f01d55e4282814043bfe789d
+timeCreated: 1426020284
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -14,7 +14,7 @@ ModelImporter:
     9500000: //RootNode
   materials:
     importMaterials: 1
-    materialName: 1
+    materialName: 0
     materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
@@ -34,7 +34,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importBlendShapes: 0
+    importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1

@@ -51,11 +51,6 @@ public class PauseControl : MonoBehaviour {
     
     }
 
-    public void Exit()
-    {
-        Application.Quit();
-    }
-
     public void StartPanelClose()
     {
         start.SetBool("OK", true);
@@ -65,4 +60,18 @@ public class PauseControl : MonoBehaviour {
         started = true;
     }
 
+    public void RestartLevel()
+    {
+        Application.LoadLevel(Application.loadedLevel);
+    }
+
+    public void ReturnToMenu()
+    {
+        Application.LoadLevel(0);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }
