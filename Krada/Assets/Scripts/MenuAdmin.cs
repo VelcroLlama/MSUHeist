@@ -6,6 +6,14 @@ public class MenuAdmin : MonoBehaviour
     public Animator menu;
     public Animator options;
     public Animator levels;
+
+    void Awake()
+    {
+        menu.SetBool("closed", false);
+        options.SetBool("closed", true);
+        levels.SetBool("closed", true);
+    }
+    
     public void MenuChange()
     {
         if (!menu.GetBool("closed"))
