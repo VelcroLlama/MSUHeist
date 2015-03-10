@@ -25,7 +25,7 @@ public class SmoothFollow : MonoBehaviour {
 
 		RaycastHit hit;
 		var direction = wantedPosition - Target.position;
-		var offset = 0.05f;
+		var offset = 0.15f;
 		direction.Normalize ();
 		Physics.Raycast (Target.position + direction * offset, direction, out hit, PositionDelta.magnitude);
 		if (hit.collider) {
