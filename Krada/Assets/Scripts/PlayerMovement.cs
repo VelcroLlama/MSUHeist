@@ -4,7 +4,6 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour {
 	
 	public CharacterController controller;
-
 	public float Sensitivity;
 	public float Speed;
 	public float SprintCoef;
@@ -18,7 +17,7 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		var speed = Vector3.zero;
+        var speed = Vector3.zero;
 		if (controller.isGrounded && Input.GetAxis ("Jump") > 0) {
 			DownSpeed = Vector3.up * 1.2f;
 		} else if (!controller.isGrounded){

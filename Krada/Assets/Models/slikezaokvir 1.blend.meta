@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 31e539719461fc548931a50eab1170ab
-timeCreated: 1426017801
+guid: 703590c501cb49d43bde00a81d063a85
+timeCreated: 1426029500
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: BezierCurve
+    4300000: Cube
     7400000: Default Take
     9500000: //RootNode
   materials:
