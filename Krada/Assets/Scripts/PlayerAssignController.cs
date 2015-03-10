@@ -20,10 +20,6 @@ public class PlayerAssignController : MonoBehaviour {
 		if (player != null) {
 			player.tag = "Player";
 			player.GetComponent<PlayerMovement>().Activate();
-			var cam = GameObject.FindGameObjectWithTag("MainCamera");
-			if (cam == null)
-				throw new UnityException("There is no main camera in the scene!!");
-			cam.GetComponent<SmoothFollow>().Target = player.transform;
 			return true;
 		}
 		return false;

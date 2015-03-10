@@ -68,11 +68,12 @@ public class RobberMovement : MonoBehaviour {
 			Target = t;
 			Ray ray = new Ray(transform.position, inTargetDirection);
 			RaycastHit hit;
-			Physics.Raycast (ray, out hit, SeeDistance, 8);
+			Physics.Raycast (ray, out hit, SeeDistance);
+			Debug.DrawLine(ray.origin, hit.point, Color.red);
 			if (hit.collider != null)
 			if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
 				if(hit.distance < GrabDistance){
-					GrabPlayer(t);
+					GrabPlayer(t.transform.parent.gameObject);
 				}
 				ActivelyFollow = true;
 				robberAnim.SetBool("Running", true);
@@ -109,10 +110,8 @@ public class RobberMovement : MonoBehaviour {
 	}
 
 	void GrabPlayer(GameObject player){
-		var movement = player.GetComponent<PlayerMovement> ();
-		if (movement != null) {
-			movement.enabled = false;
-			Destroy(player, GrabDuration);
-		}
+		Debug.Log ("Grabbing");
+		player.GetComponent<PlayerMovement> ().enabled = false;
+		Destroy(player, GrabDuration);
 	}
 }

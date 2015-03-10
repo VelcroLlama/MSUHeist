@@ -34,5 +34,10 @@ public class PlayerMovement : MonoBehaviour {
 
 	public void Activate(){
 		this.enabled = true;
+		// set main camera to this object
+		var cam = GameObject.FindGameObjectWithTag("MainCamera");
+		if (cam == null)
+			throw new UnityException("There is no main camera in the scene!!");
+		cam.GetComponent<SmoothFollow>().Target = transform;
 	}
 }
