@@ -7,6 +7,7 @@ public class RobberMovement : MonoBehaviour {
 	public float Speed;
 	public float SprintCoef;
 	public float SeeDistance;
+    public Animator robberAnim;
 
 	private GameObject Target;
 	private Vector3 SpeedVector;
@@ -37,7 +38,8 @@ public class RobberMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		changeDirectionTimer -= Time.deltaTime;
+        robberAnim.SetBool("Grabbing", false);
+        changeDirectionTimer -= Time.deltaTime;
 		if(Target != null && ActivelyFollow){
 			TargetSpeedVector = inTargetDirection * Speed * SprintCoef;
 		} else if (changeDirectionTimer <= 0) {
@@ -55,6 +57,7 @@ public class RobberMovement : MonoBehaviour {
 		FindTargetAndFollow ();
 
 		Move ();
+        
 	}
 
 	void FindTargetAndFollow (){
@@ -65,8 +68,10 @@ public class RobberMovement : MonoBehaviour {
 		if (hit.collider != null)
 		if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
 			ActivelyFollow = true;
+            robberAnim.SetBool("Running", true);
 		} else {
 			ActivelyFollow = false;
+            robberAnim.SetBool("Running", false);
 		}
 	}
 
