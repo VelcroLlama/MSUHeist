@@ -85,7 +85,7 @@ public class RobberMovement : MonoBehaviour {
 		RaycastHit hit;
 		Physics.Raycast (ray, out hit, 0.8f);
 		if (hit.collider != null)
-		if (hit.collider.tag == "Wall" || hit.collider.tag == "Robber") {
+		if (hit.collider.tag == "Wall" || hit.collider.tag == "Robber" || hit.collider.tag == "LaserWall") {
 			Debug.DrawLine (hit.point, ray.origin, Color.red);
 			var normal = Quaternion.AngleAxis(90, Vector3.up) * hit.normal;
 			TargetSpeedVector += coef * Mathf.Clamp(1-hit.distance, 0, 1) * normal;
