@@ -63,23 +63,26 @@ public class RobberMovement : MonoBehaviour {
 	}
 
 	void FindTargetAndFollow (){
-		Target = GameObject.FindGameObjectWithTag ("PlayerBody");
-		Ray ray = new Ray(transform.position, inTargetDirection);
-		RaycastHit hit;
-		Physics.Raycast (ray, out hit, SeeDistance);
-		if (hit.collider != null)
-		if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
-			if(hit.distance < GrabDistance){
-				GrabPlayer(hit.collider.gameObject);
+		var Targets = GameObject.FindGameObjectsWithTag ("PlayerBody");
+		foreach (var t in Targets) {
+			Target = t;
+			Ray ray = new Ray(transform.position, inTargetDirection);
+			RaycastHit hit;
+			Physics.Raycast (ray, out hit, SeeDistance, 8);
+			if (hit.collider != null)
+			if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
+				if(hit.distance < GrabDistance){
+					GrabPlayer(t);
+				}
+				ActivelyFollow = true;
+				robberAnim.SetBool("Running", true);
+				return;
 			}
-			ActivelyFollow = true;
-            robberAnim.SetBool("Running", true);
-		} else {
-			ActivelyFollow = false;
-            robberAnim.SetBool("Running", false);
 		}
+		ActivelyFollow = false;
+		robberAnim.SetBool("Running", false);
 	}
-
+	
 	bool CheckCollision (Vector3 direction, float coef){
 		Ray ray = new Ray (rayOrigin, direction);
 		RaycastHit hit;
