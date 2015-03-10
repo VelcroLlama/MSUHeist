@@ -6,18 +6,11 @@ public class SmoothFollow : MonoBehaviour {
 	public float VerticalSensitivity;
 	public float Smoothness = 0.1f;
 
-	private Vector3 PositionDelta;
-	private Transform Target;
+	public Vector3 PositionDelta;
+	public Transform Target;
 
 	private float verticalRotation;
-	
-	// Use this for initialization
-	void Start () {
-		PositionDelta = transform.localPosition;
-		Target = transform.parent;
-		transform.parent = null;
-	}
-	
+
 	// Update is called once per frame
 	void LateUpdate () {
 		if (Target == null)
