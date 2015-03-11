@@ -71,7 +71,7 @@ public class RobberMovement : MonoBehaviour {
 			Physics.Raycast (ray, out hit, SeeDistance);
 			Debug.DrawLine(ray.origin, hit.point, Color.red);
 			if (hit.collider != null)
-			if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0.2) {
+			if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0) {
 				if(hit.distance < GrabDistance){
 					GrabPlayer(t.transform.parent.gameObject);
 				}
