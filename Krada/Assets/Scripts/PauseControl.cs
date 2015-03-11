@@ -74,4 +74,12 @@ public class PauseControl : MonoBehaviour {
     {
         Application.Quit();
     }
+
+    public void Resume()
+    {
+        pause.SetBool("Open", false);
+        Time.timeScale = 1;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
+    }
 }

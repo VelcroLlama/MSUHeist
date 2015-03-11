@@ -110,7 +110,9 @@ public class RobberMovement : MonoBehaviour {
 	}
 
 	void GrabPlayer(GameObject player){
-		player.GetComponent<PlayerMovement> ().enabled = false;
+        robberAnim.SetTrigger("Grabbing");
+        player.GetComponent<PlayerMovement> ().enabled = false;
 		Destroy(player, GrabDuration);
+       
 	}
 }
