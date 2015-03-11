@@ -10,6 +10,7 @@ public class PlayerCounter : MonoBehaviour {
     private int LeftNumber;
     public Animator ScreenFade;
     private float seconds = 0f;
+    private int ArtLost;
     private int PlayersLeft {
 		get {
             return GameObject.FindGameObjectsWithTag("InactivePlayer").Length + GameObject.FindGameObjectsWithTag("Player").Length; 
