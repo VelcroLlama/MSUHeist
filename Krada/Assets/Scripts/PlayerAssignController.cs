@@ -6,6 +6,12 @@ public class PlayerAssignController : MonoBehaviour {
 
 	private bool gameFinished;
 	
+	void OnTriggerEnter(Collider other){
+		if (other.tag == "Player") {
+			Destroy(other.gameObject, 0.4f);
+		}
+	}
+
 	void Update(){
 		// If there is no active player, try activate it.
 		if (GameObject.FindGameObjectsWithTag("Player").Length == 0) {
