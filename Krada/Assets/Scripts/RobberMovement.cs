@@ -10,7 +10,9 @@ public class RobberMovement : MonoBehaviour {
 	public float GrabDistance;
 	public float GrabDuration;
     public Animator robberAnim;
-
+    public GameObject targetGameObject;
+    
+    private bool increased = false;
 	private GameObject Target;
 	private Vector3 SpeedVector;
 	private Vector3 TargetSpeedVector;
@@ -59,6 +61,7 @@ public class RobberMovement : MonoBehaviour {
 		FindTargetAndFollow ();
 
 		Move ();
+        increased = false;
         
 	}
 
@@ -113,6 +116,12 @@ public class RobberMovement : MonoBehaviour {
         robberAnim.SetTrigger("Grabbing");
         player.GetComponent<PlayerMovement> ().enabled = false;
 		Destroy(player, GrabDuration);
+        if (!increased)
+        {
+            targetGameObject.GetComponent<PlayerCounter>().ArtLost++;
+            increased = true;
+        }
+        
        
 	}
 }

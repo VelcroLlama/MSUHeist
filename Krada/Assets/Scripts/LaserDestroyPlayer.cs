@@ -3,7 +3,8 @@ using System.Collections;
 
 public class LaserDestroyPlayer : MonoBehaviour {
 
-	// Use this for initialization
+    public GameObject targetGameObject;
+    // Use this for initialization
 	void Start () {
 	
 	}
@@ -16,6 +17,7 @@ public class LaserDestroyPlayer : MonoBehaviour {
 	void OnTriggerEnter(Collider collider){
 		if (collider.gameObject.tag == "Player") {
 			Destroy (collider.gameObject, 0.1f);
+            targetGameObject.GetComponent<PlayerCounter>().ArtLost++;
 		}
 	}
 }
