@@ -7,6 +7,7 @@ public class RobberMovement : MonoBehaviour {
 	public float Speed;
 	public float SprintCoef;
 	public float SeeDistance;
+	public float SeeAlwaysDistance;
 	public float GrabDistance;
 	public float GrabDuration;
     public Animator robberAnim;
@@ -74,7 +75,8 @@ public class RobberMovement : MonoBehaviour {
 			Physics.Raycast (ray, out hit, SeeDistance);
 			Debug.DrawLine(ray.origin, hit.point, Color.red);
 			if (hit.collider != null)
-			if (hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0) {
+			if ((hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0)
+				   || hit.distance < SeeAlwaysDistance) {
 				if(hit.distance < GrabDistance && t.transform.parent.GetComponent<PlayerMovement>().enabled){
 					GrabPlayer(t.transform.parent.gameObject);
 				}
