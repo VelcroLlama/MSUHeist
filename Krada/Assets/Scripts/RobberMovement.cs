@@ -38,6 +38,7 @@ public class RobberMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		SpeedVector = Vector3.zero;
+		TargetSpeedVector = transform.forward * Speed;
 		changeDirectionTimer = 0;
 	}
 	
@@ -48,8 +49,8 @@ public class RobberMovement : MonoBehaviour {
 		if(Target != null && ActivelyFollow){
 			TargetSpeedVector = inTargetDirection * Speed * SprintCoef;
 		} else if (changeDirectionTimer <= 0) {
-			changeDirectionTimer = Random.Range (0.6f, 2);
-			TargetSpeedVector = Random.onUnitSphere * Speed + SpeedVector;
+			changeDirectionTimer = Random.Range (2f, 3f);
+			TargetSpeedVector = Random.onUnitSphere * 0.02f;
 		}
 
 		if (CheckCollision (transform.right, 0.02f))
@@ -75,8 +76,9 @@ public class RobberMovement : MonoBehaviour {
 			Physics.Raycast (ray, out hit, SeeDistance);
 			Debug.DrawLine(ray.origin, hit.point, Color.red);
 			if (hit.collider != null)
-			if ((hit.collider.tag == "PlayerBody" && Vector3.Dot (ray.direction, SpeedVector.normalized) > 0)
-				   || hit.distance < SeeAlwaysDistance) {
+			if (hit.collider.tag == "PlayerBody" && 
+					(Vector3.Dot (ray.direction, SpeedVector.normalized) > 0 || 
+					hit.distance < SeeAlwaysDistance)) {
 				if(hit.distance < GrabDistance && t.transform.parent.GetComponent<PlayerMovement>().enabled){
 					GrabPlayer(t.transform.parent.gameObject);
 				}
