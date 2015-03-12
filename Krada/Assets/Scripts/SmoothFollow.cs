@@ -32,11 +32,11 @@ public class SmoothFollow : MonoBehaviour {
 			var point = hit.point - direction * offset;
 			var distance = Vector3.Distance(Target.position, point);
 			var vx2 = new Vector3(direction.x, 0, direction.z).sqrMagnitude * distance;
-			point += 0.5f * Vector3.up * (Mathf.Sqrt(PositionDelta.sqrMagnitude - vx2));
+			point += 0.3f * Vector3.up * (Mathf.Sqrt(PositionDelta.sqrMagnitude - vx2));
 			wantedPosition = point;
 		}
 
-		transform.position = Vector3.Lerp (transform.position, wantedPosition, 0.1f);
+		transform.position = Vector3.Lerp (transform.position, wantedPosition, 0.08f);
 		transform.LookAt (Target.position);
 
 		verticalRotation -= Input.GetAxis ("Mouse Y") * Time.deltaTime * VerticalSensitivity;
