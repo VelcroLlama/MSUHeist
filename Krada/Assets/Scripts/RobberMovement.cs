@@ -88,7 +88,9 @@ public class RobberMovement : MonoBehaviour {
 			if (hit.collider.tag == "PlayerBody" && 
 					(Vector3.Dot (ray.direction, SpeedVector.normalized) > 0 && 
 					targetDelta.magnitude < SeeDistance || targetDelta.magnitude < SeeAlwaysDistance)) {
-				if(targetDelta.magnitude < GrabDistance && t.transform.parent.GetComponent<PlayerMovement>().enabled){
+				if(targetDelta.magnitude < GrabDistance && 
+				   (t.transform.parent.GetComponent<PlayerMovement>().enabled ||
+				 t.transform.parent.tag == "InactivePlayer")){
 					GrabPlayer(t.transform.parent.gameObject);
 				}
 				ActivelyFollow = true;
