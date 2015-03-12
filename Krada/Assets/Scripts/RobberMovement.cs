@@ -58,7 +58,7 @@ public class RobberMovement : MonoBehaviour {
         robberAnim.SetBool("Grabbing", false);
         changeDirectionTimer -= Time.deltaTime;
 		if(Target != null && ActivelyFollow){
-			TargetSpeedVector = targetDelta.normalized * Speed * SprintCoef;
+			TargetSpeedVector = targetDelta.normalized * Speed * (Target.transform.parent.tag == "Player" ? SprintCoef : 1);
 		} else if (changeDirectionTimer <= 0) {
 			changeDirectionTimer = Random.Range (0.5f, 3f);
 			TargetSpeedVector = Random.onUnitSphere * 0.05f + SpeedVector;
