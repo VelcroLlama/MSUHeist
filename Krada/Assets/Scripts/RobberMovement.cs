@@ -10,10 +10,10 @@ public class RobberMovement : MonoBehaviour {
 	public float SeeAlwaysDistance;
 	public float GrabDistance;
 	public float GrabDuration;
+	public float RayCastHeight;
     public Animator robberAnim;
     public GameObject targetGameObject;
     
-    private bool increased = false;
 	private GameObject Target;
 	private Vector3 SpeedVector;
 	private Vector3 TargetSpeedVector;
@@ -21,17 +21,27 @@ public class RobberMovement : MonoBehaviour {
 
 	private float changeDirectionTimer;
 
+	private Vector3 targetDelta {
+		get {
+			if (Target != null) {
+				var vec = Target.transform.position - transform.position;
+				vec.y = 0;
+				return vec;
+			}
+			return Vector3.zero;
+		}
+	}
 	private Vector3 inTargetDirection{
 		get {
 			if(Target != null)
-				return (Target.transform.position - this.transform.position).normalized;
+				return (Target.transform.position - rayOrigin).normalized;
 			else
 				return Vector3.zero;
 		}
 	}
 	private Vector3 rayOrigin {
 		get {
-			return this.transform.position + Vector3.up * .5f;
+			return this.transform.position + Vector3.up * RayCastHeight;
 		}
 	}
 
@@ -47,10 +57,10 @@ public class RobberMovement : MonoBehaviour {
         robberAnim.SetBool("Grabbing", false);
         changeDirectionTimer -= Time.deltaTime;
 		if(Target != null && ActivelyFollow){
-			TargetSpeedVector = inTargetDirection * Speed * SprintCoef;
+			TargetSpeedVector = targetDelta.normalized * Speed * SprintCoef;
 		} else if (changeDirectionTimer <= 0) {
-			changeDirectionTimer = Random.Range (2f, 3f);
-			TargetSpeedVector = Random.onUnitSphere * 0.02f;
+			changeDirectionTimer = Random.Range (0.5f, 3f);
+			TargetSpeedVector = Random.onUnitSphere * 0.05f + SpeedVector;
 		}
 
 		if (CheckCollision (transform.right, 0.02f))
@@ -63,7 +73,6 @@ public class RobberMovement : MonoBehaviour {
 		FindTargetAndFollow ();
 
 		Move ();
-        increased = false;
         
 	}
 
@@ -71,21 +80,23 @@ public class RobberMovement : MonoBehaviour {
 		var Targets = GameObject.FindGameObjectsWithTag ("PlayerBody");
 		foreach (var t in Targets) {
 			Target = t;
-			Ray ray = new Ray(transform.position, inTargetDirection);
+			Ray ray = new Ray(rayOrigin, inTargetDirection);
 			RaycastHit hit;
-			Physics.Raycast (ray, out hit, SeeDistance);
-			Debug.DrawLine(ray.origin, hit.point, Color.red);
+			Physics.Raycast (ray, out hit);
+			Debug.Log(hit.collider.name);
 			if (hit.collider != null)
 			if (hit.collider.tag == "PlayerBody" && 
-					(Vector3.Dot (ray.direction, SpeedVector.normalized) > 0 || 
-					hit.distance < SeeAlwaysDistance)) {
-				if(hit.distance < GrabDistance && t.transform.parent.GetComponent<PlayerMovement>().enabled){
+					(Vector3.Dot (ray.direction, SpeedVector.normalized) > 0 && 
+					targetDelta.magnitude < SeeDistance || targetDelta.magnitude < SeeAlwaysDistance)) {
+				if(targetDelta.magnitude < GrabDistance && t.transform.parent.GetComponent<PlayerMovement>().enabled){
 					GrabPlayer(t.transform.parent.gameObject);
 				}
 				ActivelyFollow = true;
 				robberAnim.SetBool("Running", true);
+				Debug.DrawLine(ray.origin, hit.point, Color.green);
 				return;
 			}
+			Debug.DrawLine(ray.origin, hit.point, Color.red);
 		}
 		ActivelyFollow = false;
 		robberAnim.SetBool("Running", false);
@@ -120,12 +131,6 @@ public class RobberMovement : MonoBehaviour {
         robberAnim.SetTrigger("Grabbing");
         player.GetComponent<PlayerMovement> ().enabled = false;
 		Destroy(player, GrabDuration);
-        if (!increased)
-        {
-            targetGameObject.GetComponent<PlayerCounter>().ArtLost++;
-            increased = true;
-        }
-        
-       
+		targetGameObject.GetComponent<PlayerCounter> ().ArtLost++;
 	}
 }
