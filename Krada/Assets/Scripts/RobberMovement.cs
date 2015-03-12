@@ -89,9 +89,7 @@ public class RobberMovement : MonoBehaviour {
 			if (hit.collider.tag == "PlayerBody" && 
 					(Vector3.Dot (ray.direction, SpeedVector.normalized) > 0 && 
 					targetDelta.magnitude < SeeDistance || targetDelta.magnitude < SeeAlwaysDistance)) {
-				if(targetDelta.magnitude < GrabDistance && 
-				   (t.transform.parent.GetComponent<PlayerMovement>().enabled ||
-				 t.transform.parent.tag == "InactivePlayer")){
+				if(targetDelta.magnitude < GrabDistance){
 					GrabPlayer(t.transform.parent.gameObject);
 				}
 				ActivelyFollow = true;
@@ -131,10 +129,15 @@ public class RobberMovement : MonoBehaviour {
 		this.transform.forward = SpeedVector.normalized;
 	}
 
-	void GrabPlayer(GameObject player){
-        robberAnim.SetTrigger("Grabbing");
-        player.GetComponent<PlayerMovement> ().enabled = false;
-		Destroy(player, GrabDuration);
-		targetGameObject.GetComponent<PlayerCounter> ().ArtLost++;
-	}
+	bool GrabPlayer(GameObject player){
+		if (!player.GetComponent<PlayerMovement> ().Found) {
+			robberAnim.SetTrigger("Grabbing");
+			player.GetComponent<PlayerMovement> ().enabled = false;
+			player.GetComponent<PlayerMovement> ().Found = true;
+			Destroy(player, GrabDuration);
+			targetGameObject.GetComponent<PlayerCounter> ().ArtLost++;
+			return true;
+		}
+		return false;
+    }
 }

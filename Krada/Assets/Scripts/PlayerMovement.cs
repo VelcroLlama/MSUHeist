@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour {
 	public float Speed;
 	public float SprintCoef;
 
+	public bool Found;
+
 	private Vector3 DownSpeed;
 
 	// Use this for initialization
