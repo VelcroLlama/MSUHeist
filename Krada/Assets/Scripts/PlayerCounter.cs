@@ -58,7 +58,15 @@ public class PlayerCounter : MonoBehaviour {
                 }
                 else
                 {
-                    Application.LoadLevel(Application.loadedLevel + 1);
+                    if (Application.loadedLevel == 5)
+                    {
+                        Application.LoadLevel(0);
+                    }
+                    else
+                    {
+                        Application.LoadLevel(Application.loadedLevel + 1);
+                    }
+
                 }
             }
         }

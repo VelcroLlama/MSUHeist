@@ -13,6 +13,7 @@ public class RobberMovement : MonoBehaviour {
 	public float RayCastHeight;
     public Animator robberAnim;
     public GameObject targetGameObject;
+    public AudioSource audio;
     
 	private GameObject Target;
 	private Vector3 SpeedVector;
@@ -102,6 +103,7 @@ public class RobberMovement : MonoBehaviour {
 		}
 		ActivelyFollow = false;
 		robberAnim.SetBool("Running", false);
+        audio.Play();
 	}
 	
 	bool CheckCollision (Vector3 direction, float coef){
